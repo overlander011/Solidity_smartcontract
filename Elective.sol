@@ -13,12 +13,11 @@ contract ElectiveAuction {
     }
     
     address[] public deployedElective;
-    
-    string[]  stdlist;
-    
+    address[] public electiveAuction;
+
+    mapping (uint256 => mapping (uint256 => address[])) public addressbyyearandsemester;
     mapping (address => ClassDetail) public elective;
     mapping (address => ClassDetail[]) public createrhistory;
-
     
     function createElective(uint256 subjectid,uint256 studentnumber,uint256 semester,uint256 year,uint256 enddate) public {
         address newElective = address(new Class(subjectid,studentnumber,semester, year,msg.sender,now));
@@ -34,16 +33,14 @@ contract ElectiveAuction {
         
         createrhistory[msg.sender].push(currentElective);
         elective[newElective] = currentElective;
+        addressbyyearandsemester[year][semester].push(newElective);
 
     }
     
-    function getDeployedElectiveByYearAndSemester (uint256 semester,uint256 year) public view returns(address[] memory){
-        for(uint256 i=0;i<deployedElective.length;i++){
-            if
-        }
-        
-        return deployedElective;
+    function getAddressBySemester (uint256 year,uint256 semester) public view returns(address[] memory){
+        return addressbyyearandsemester[year][semester];
     }
+    
     
     function getDeployedElective () public view returns(address[] memory){
         return deployedElective;
@@ -59,7 +56,7 @@ contract ElectiveAuction {
         date = elective[addr].enddate;
         creater = elective[addr].creater;
         
-        //stdlist = elective[addr].studentlist;
+       
     }
 }
 
