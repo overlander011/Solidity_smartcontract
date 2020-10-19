@@ -62,10 +62,34 @@ contract ElectiveAuction {
 
 contract Class {
     
-    //string memory name;
-   // uint256 studentnumbert;
+    address creatorAddress;
+    uint256 subjectid;
+    uint256 studentnumber;
+    uint256 semester;
+    uint256 year;
+    uint256 enddate;
+    mapping (uint256 => address[])  studentregisted;
     
-    constructor(uint256 subjectid,uint256 studentnumber,uint256 semester,uint256 year,address creater, uint256 timestamp) public {
-        
+    enum State { Start, Voting, Ended }
+	State public state;
+
+	constructor(uint256 subjectid,uint256 studentnumber ,uint256 semester,uint256 year,address owner,uint256 date) public {
+        creatorAddress = owner;
+        subjectid = subjectid;
+        studentnumber = studentnumber;
+        semester = semester;
+        year = year;
+        enddate = date;
+
     }
+    
+    function registerClass(uint256 _subjectid) public {
+        studentregisted[_subjectid].push(msg.sender);
+    }
+    
+    function getStudentBySubjectId(uint256 __subjectid) public view returns(address[] memory){
+        return studentregisted[subjectid];
+    }
+    
+    
 }
